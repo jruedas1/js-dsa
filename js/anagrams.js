@@ -43,6 +43,7 @@ function steelesValidAnagram(first, second){
             lookup[letter] -= 1;
         }
     }
-
     return true;
 }
+
+console.log(steelesValidAnagram("aarr", "arrr"));
