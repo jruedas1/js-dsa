@@ -164,3 +164,31 @@ function findLongestSubstring(str){
     }
     return uniqStrLen;
 }
+
+// Here's the instructor solution
+// He uses a similar strategy -- with the object, which he calls "seen"
+// to keep track of the characters encountered and their indexes
+// He doesn't keep track of "end" but since he uses a for loop
+// he is keeping track of "i" or the index, which amounts to the same
+// One more efficient thing is he doesn't track the current substring,
+// This makes sense -- in fact, once I switched to using the char-tracker object,
+// I could have dispensed with the currStr length and just
+// tracked the difference between end and start - that's what he does
+// so, I was actually pretty close
+function findLongestSubstringInstructorSolution(str) {
+    let longest = 0;
+    let seen = {};
+    let start = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+        if (seen[char]) {
+            start = Math.max(start, seen[char]);
+        }
+        // index - beginning of substring + 1 (to include current in count)
+        longest = Math.max(longest, i - start + 1);
+        // store the index of the next char so as to not double count
+        seen[char] = i + 1;
+    }
+    return longest;
+}
