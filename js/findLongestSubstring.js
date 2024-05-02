@@ -165,6 +165,19 @@ function findLongestSubstring(str){
     return uniqStrLen;
 }
 
+// Analyzing this later, I had assumed that .substring() would be O(1)
+// because you know where the indexes are and retrieving an array element
+// at a particular index is O(1)
+// However, this may not be the case because some implementations
+// will create a copy of a backing array, and that is O(n)
+// therefore this may count as quadratic O due to the use of substring
+// within the loop
+// therefore the algorithm would have to be modified to
+// use only the difference between start and end
+// and not keep track of the current substring itself
+// so, you have to get rid of currStr
+
+
 // Here's the instructor solution
 // He uses a similar strategy -- with the object, which he calls "seen"
 // to keep track of the characters encountered and their indexes
