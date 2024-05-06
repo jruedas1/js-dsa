@@ -26,7 +26,7 @@ console.log(countUniqueValues([2, 2, 3, 3, 5, 5, 6, 6, 6, 7, 7, 9]));
 console.log(countUniqueValues([]));
 
 // colt steele's solution
-function steelesCountUniqueValues(arr){
+function countUniqueValuesInstructorVersion(arr){
     if (arr.length === 0) return 0;
     let i = 0;
     for (let j = 1; j < arr.length; j++){
