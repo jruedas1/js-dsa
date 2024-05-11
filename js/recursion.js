@@ -138,4 +138,35 @@ function fib(num){
    return fib(num-1) + fib(num - 2);
 }
 
-console.log(fib(28));
+// console.log(fib(28));
+
+// Write a recursive function called reverse
+// which accepts a string and returns a new string in reverse.
+
+function reverse(str){
+    let revStr = '';
+    function helper(helperInput){
+        if (helperInput.length === 0){
+            return false;
+        }
+        revStr += helperInput[helperInput.length - 1];
+        helperInput = helperInput.substring(0, helperInput.length - 1);
+        helper(helperInput);
+    }
+    helper(str);
+    return revStr;
+}
+
+// console.log("awesome".substring(0, "awesome".length - 1));
+
+// console.log(reverse('awesome')); // 'emosewa'
+// reverse('rithmschool') // 'loohcsmhtir'
+
+function revPure(str){
+    let revStr = str[str.length - 1];
+    if (str.length === 0) return '';
+    revStr += revPure(str.substring(0, str.length - 1));
+    return revStr;
+}
+
+console.log(revPure('awesome')); // 'emosewa'
