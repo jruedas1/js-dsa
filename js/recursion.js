@@ -169,4 +169,57 @@ function revPure(str){
     return revStr;
 }
 
-console.log(revPure('awesome')); // 'emosewa'
+// console.log(revPure('awesome')); // 'emosewa'
+
+// Write a recursive function called isPalindrome
+// which returns true if the string passed to it
+// is a palindrome (reads the same forward and backward).
+// Otherwise, it returns false.
+
+// isPalindrome('awesome') // false
+// isPalindrome('foobar') // false
+// console.log(isPalindrome('tacocat')); // true
+// console.log(isPalindrome('amanaplanacanalpanama')); // true
+// console.log(isPalindrome('amanaplanacanalpandemonium')); // false
+
+// First attempt:
+// function isPalindrome(str){
+//    let itsAPalindrome = false;
+//    if (str.length <= 1) return itsAPalindrome;
+//    if (str[0] === str[str.length-1]) itsAPalindrome = true;
+//    isPalindrome(str.substring(1, str.length-1));
+//    return itsAPalindrome;
+// }
+
+// Thoughts. It should reduce the string passed from the beginning AND the end each time
+// it should compare the two and return true if they are the same
+// otherwise it should return false and end the recursion
+// it should stop when there is zero or one left, as then there
+// is no comparison to carry out
+
+// Refactor:
+function isPalindrome(str){
+    let itsAPalindrome = str[0] === str[str.length-1];
+    if (str.length <= 1 || !itsAPalindrome) return itsAPalindrome;
+    isPalindrome(str.substring(1, str.length-1));
+    return itsAPalindrome;
+}
+
+// Write a recursive function called someRecursive
+// which accepts an array and a callback.
+// The function returns true if
+// a single value in the array returns true
+// when passed to the callback.
+// Otherwise, it returns false.
+
+// SAMPLE INPUT / OUTPUT
+// const isOdd = val => val % 2 !== 0;
+
+// someRecursive([1,2,3,4], isOdd) // true
+// someRecursive([4,6,8,9], isOdd) // true
+// someRecursive([4,6,8], isOdd) // false
+// someRecursive([4,6,8], val => val > 10); // false
+
+function someRecursive(){
+    // add whatever parameters you deem necessary - good luck!
+}
