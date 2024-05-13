@@ -410,3 +410,44 @@ function stringifyNumbers(obj){
 }
 
 // console.log(stringifyNumbers(obj3));
+
+// collectStrings
+//
+// Write a function called collectStrings
+// which accepts an object and returns
+// an array of all the values in the object
+// that have a typeof string
+
+const obj = {
+    stuff: "foo",
+    data: {
+        val: {
+            thing: {
+                info: "bar",
+                moreInfo: {
+                    evenMoreInfo: {
+                        weMadeIt: "baz"
+                    }
+                }
+            }
+        }
+    }
+}
+
+function collectStrings(obj){
+    const accArr = [];
+    function helper(helperInput){
+        for (const key in helperInput){
+            if (typeof helperInput[key] === 'string'){
+                accArr.push(helperInput[key]);
+            }
+            if (typeof helperInput[key] === 'object'){
+                (helper(helperInput[key]));
+            }
+        }
+    }
+    helper(obj);
+    return accArr;
+}
+
+console.log(collectStrings(obj)); // ["foo", "bar", "baz"])
