@@ -348,3 +348,65 @@ function capitalizeWords (arr) {
 
 // let words = ['i', 'am', 'learning', 'recursion'];
 // console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
+
+// stringifyNumbers
+//
+// Write a function called stringifyNumbers
+// which takes in an object and finds
+// all the values which are numbers
+// and converts them to strings.
+// Recursion would be a great way to solve this!
+//
+// The exercise intends for you to
+// create a new object with
+// the numbers converted to strings,
+// and not modify the original.
+// Keep the original object unchanged.
+
+
+let obj3 = {
+    num: 1,
+    test: [],
+    data: {
+        val: 4,
+        info: {
+            isRight: true,
+            random: 66
+        }
+    }
+}
+
+
+// stringifyNumbers(obj)
+
+/*
+{
+    num: "1",
+    test: [],
+    data: {
+        val: "4",
+        info: {
+            isRight: true,
+            random: "66"
+        }
+    }
+}
+*/
+
+const simpleObj = { num1: 3, string: "yo", num2: 5}
+
+function stringifyNumbers(obj){
+    const strObj = {}
+    for (const key in obj){
+        if (typeof obj[key] === 'number'){
+            strObj[key] = obj[key].toString();
+        } else if (!Array.isArray(obj[key]) && typeof obj[key] === 'object'){
+            strObj[key] = stringifyNumbers(obj[key]);
+        } else {
+            strObj[key] = obj[key];
+        }
+    }
+    return strObj;
+}
+
+// console.log(stringifyNumbers(obj3));
