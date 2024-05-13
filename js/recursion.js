@@ -273,6 +273,45 @@ function flattenPure(arr){
 // console.log(flattenPure([1, [2, 3]]));  // [1, 2, 3, 4, 5]
 // console.log(flattenPure([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
 
+// How this works:
+// Assuming the array [1, 2, [3, 4]]
+// callstack lvl 1
+// The first thing it does is check if arr[0] (1) is an array
+// it isn't, so it pushes it into accArr. accArr is now [1]
+// it is then instructed to concatenate accArr with the result
+// of running flattenPure on arr.slice(1), which is [2, [3, 4]]
+    // now it runs flattenPure a second time (callstack lvl 2)
+    // it checks if arr[0] (== 2) is an array
+    // it isn't, so it pushes it into accArr, which is []
+    // accArr here is [2]
+    // now it wants to concatenate [2] with the result of running
+    // flattenPure on arr.slice(1), which is here [3, 4]
+        // callStack lvl 3
+        // this is an array, so it runs flattenPure on it
+        // accArr here remains [], pending the results of
+        // concatenating flattenPure([3, 4]) with accArr []
+            // callStack lvl 4
+            // arr[0] is 3, so that gets pushed into accArr.
+            // accArr is now [3]
+            // it wants to concatenate [3] with the result of
+            // running flattenPure on [4]
+                // callStack lvl 5
+                // accArr becomes [4]
+                // now the algorithm slices once more, this gives
+                // callStack lvl 6
+                // an array of [] which gets passed to flattenPure
+                // here the recursion ends, because this
+                // returns [] and does not call flattenPure again
+                // now [] gets returned up to level 5, where [4]
+                // waits to concatenate, so [4] + [] == [4]
+            // [4] gets returned to level 4, where [3] awaits
+            // [3] + [4] == [3, 4]
+        // [3, 4] gets returned to level 3, where [] awaits
+        // this remains [3, 4]
+    // [3, 4] gets returned to level 2, where [2] awaits
+    // we get [2, 3, 4] returned to level 1, where [1] waits
+// we get [1, 2, 3, 4]
+
 
 // Write a recursive function called capitalizeFirst.
 // Given an array of strings, capitalize the first letter
@@ -292,6 +331,16 @@ function capitalizeFirst (arr) {
 }
 
 // console.log(capitalizeFirst(['car', 'taco', 'banana'])); // ['Car','Taco','Banana']
+
+function capitalizeFirstPure(arr){
+    let capitalized = [];
+    if (arr.length === 0) return capitalized;
+    capitalized.push(arr[0].charAt(0).toUpperCase() + arr[0].slice(1));
+    capitalized = capitalized.concat(capitalizeFirstPure(arr.slice(1)))
+    return capitalized;
+}
+
+console.log(capitalizeFirstPure(['car', 'taco', 'banana'])); // ['Car','Taco','Banana']
 
 // let str = 'car';
 // console.log(str.charAt(0).toUpperCase() + str.slice(1));
