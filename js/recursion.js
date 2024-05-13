@@ -329,4 +329,22 @@ const obj2 = {
 
 // capitalizeWords
 //
-// Write a recursive function called capitalizeWords. Given an array of words, return a new array containing each word capitalized.
+// Write a recursive function called capitalizeWords.
+// Given an array of words, return a new array
+// containing each word capitalized.
+
+function capitalizeWords (arr) {
+    const upperCased = [];
+    function helper(helperInput){
+        if (helperInput.length === 0){
+            return false;
+        }
+        upperCased.push(helperInput[0].toUpperCase());
+        helper(helperInput.slice(1));
+    }
+    helper(arr);
+    return upperCased;
+}
+
+// let words = ['i', 'am', 'learning', 'recursion'];
+// console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
