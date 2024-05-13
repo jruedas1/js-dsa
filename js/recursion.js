@@ -74,6 +74,8 @@ function collectOddsPureRecursive(arr){
     return newArr;
 }
 
+// console.log(collectOddsPureRecursive([2, 3, 5, 7, 10, 11, 15, 16]));
+
 // power(2,0) // 1
 // power(2,2) // 4
 // power(2,4) // 16
@@ -254,6 +256,23 @@ function flatten(arr){
 // console.log(flatten([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
 // flatten([[1],[2],[3]]) // [1,2,3]
 // flatten([[[[1], [[[2]]], [[[[[[[3]]]]]]]]]]) // [1,2,3]
+
+function flattenPure(arr){
+    let accArr = [];
+    if (arr.length === 0) return accArr;
+    if (Array.isArray(arr[0])) {
+        accArr = accArr.concat(flattenPure(arr[0]));
+    } else {
+        accArr.push(arr[0]);
+    }
+    accArr = accArr.concat(flattenPure(arr.slice(1)));
+    return accArr;
+}
+
+// console.log(flattenPure([1, 2, 3, 4, 5]));
+// console.log(flattenPure([1, [2, 3]]));  // [1, 2, 3, 4, 5]
+// console.log(flattenPure([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
+
 
 // Write a recursive function called capitalizeFirst.
 // Given an array of strings, capitalize the first letter
@@ -450,4 +469,4 @@ function collectStrings(obj){
     return accArr;
 }
 
-console.log(collectStrings(obj)); // ["foo", "bar", "baz"])
+// console.log(collectStrings(obj)); // ["foo", "bar", "baz"])
