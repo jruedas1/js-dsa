@@ -340,7 +340,7 @@ function capitalizeFirstPure(arr){
     return capitalized;
 }
 
-console.log(capitalizeFirstPure(['car', 'taco', 'banana'])); // ['Car','Taco','Banana']
+// console.log(capitalizeFirstPure(['car', 'taco', 'banana'])); // ['Car','Taco','Banana']
 
 // let str = 'car';
 // console.log(str.charAt(0).toUpperCase() + str.slice(1));
@@ -416,6 +416,17 @@ function capitalizeWords (arr) {
 
 // let words = ['i', 'am', 'learning', 'recursion'];
 // console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
+
+function capitalizeWordsPure(arr){
+    let upperCased = [];
+    if (arr.length === 0) return upperCased;
+    upperCased.push(arr[0].toUpperCase());
+    upperCased = upperCased.concat(capitalizeWordsPure(arr.slice(1)));
+    return upperCased;
+}
+
+let words = ['i', 'am', 'learning', 'recursion'];
+console.log(capitalizeWordsPure(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
 
 // stringifyNumbers
 //
