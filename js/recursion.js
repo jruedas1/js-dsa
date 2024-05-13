@@ -425,8 +425,8 @@ function capitalizeWordsPure(arr){
     return upperCased;
 }
 
-let words = ['i', 'am', 'learning', 'recursion'];
-console.log(capitalizeWordsPure(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
+// let words = ['i', 'am', 'learning', 'recursion'];
+// console.log(capitalizeWordsPure(words)); // ['I', 'AM', 'LEARNING', 'RECURSION']
 
 // stringifyNumbers
 //
@@ -530,3 +530,18 @@ function collectStrings(obj){
 }
 
 // console.log(collectStrings(obj)); // ["foo", "bar", "baz"])
+
+function collectStringsPure(obj){
+    let accArr = [];
+    for (const key in obj){
+        if (typeof obj[key] === 'string'){
+            accArr.push(obj[key]);
+        }
+        if (typeof obj[key] === 'object'){
+            accArr = accArr.concat(collectStringsPure(obj[key]));
+        }
+    }
+    return accArr;
+}
+
+console.log(collectStringsPure(obj));
