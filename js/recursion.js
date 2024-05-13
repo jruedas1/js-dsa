@@ -231,11 +231,26 @@ function someRecursive(arr, callback){
 // an array of arrays and returns
 // a new array with all values flattened.
 
-function flatten(){
-    // add whatever parameters you deem necessary - good luck!
+function flatten(arr){
+    const accArr = [];
+    function helper(helperInput){
+        if (helperInput.length === 0){
+            return false;
+        }
+        if (Array.isArray(helperInput[0])) {
+            helper(helperInput[0]);
+        } else {
+            accArr.push(helperInput[0]);
+        }
+        helper(helperInput.slice(1));
+    }
+    helper(arr);
+    return(accArr);
 }
 
-// flatten([1, 2, 3, [4, 5] ]) // [1, 2, 3, 4, 5]
-// flatten([1, [2, [3, 4], [[5]]]]) // [1, 2, 3, 4, 5]
+// console.log(flatten([1, 2, 3, 4, 5]));
+// console.log(Array.isArray(1))
+// console.log(flatten([1, 2, 3, [4, 5]]));  // [1, 2, 3, 4, 5]
+// console.log(flatten([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
 // flatten([[1],[2],[3]]) // [1,2,3]
 // flatten([[[[1], [[[2]]], [[[[[[[3]]]]]]]]]]) // [1,2,3]
