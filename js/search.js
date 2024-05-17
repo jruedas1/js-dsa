@@ -78,23 +78,21 @@ function linearSearch(arr, num){
 // You are then looking for the part BELOW the middle as the val is SMALLER than the middle. So you move the right to one BELOW the middle
 // Same with the other. If the middle is less than the value, you want to look at the upper (right) part of the range, and you discount middle, so you set left to one above middle, not one below middle
 
-
-function binarySearch(sortedArr, val){
-    let left = 0;
-    let right = sortedArr.length - 1;
-    if (sortedArr[right] < val) return -1;
-    if (sortedArr[left] > val) return -1;
-    while (left < right){
-        let middle = Math.floor(left + (right-left) / 2);
-        console.log(`Start of loop: left: ${left}, middle: ${middle}, right: ${right}`);
-        // if (sortedArr[left] === val) return left;
-        // if (sortedArr[right] === val) return right;
-        if (sortedArr[middle] === val) return middle;
-        if (sortedArr[middle] > val) right = middle - 1;
-        if (sortedArr[middle] < val) left = middle + 1;
-    }
-    return -1;
-}
+// function binarySearch(sortedArr, val){
+//     let left = 0;
+//     let right = sortedArr.length - 1;
+//     if (sortedArr[right] < val) return -1;
+//     if (sortedArr[left] > val) return -1;
+//     while (left < right){
+//         let middle = Math.floor(left + (right-left) / 2);
+//         if (sortedArr[left] === val) return left;
+//         if (sortedArr[right] === val) return right;
+//         if (sortedArr[middle] === val) return middle;
+//         if (sortedArr[middle] > val) right = middle - 1;
+//         if (sortedArr[middle] < val) left = middle + 1;
+//     }
+//     return -1;
+// }
 
 // console.log(binarySearch([1, 2, 3, 4, 5], 2)); // 1
 // console.log(binarySearch([1, 2, 3, 4, 5], 3)); // 2
@@ -124,10 +122,78 @@ function binarySearch(sortedArr, val){
 // condition to while(left <= right)
 // The question is, why?
 // Let's try this on one of the ones that breaks
- binarySearch([1, 2, 3, 4, 5], 2); // 1
+//  binarySearch([1, 2, 3, 4, 5], 2); // 1
 // This one yields -1 if I take away the extra checks
 // When we start, we have
 // [1, 2, 3, 4, 5]
-//  S     M     E
-// OK I can see one apparent error immediately:
-// I change the middle before checking it
+//  L     M     R
+// Now I check mid: it's not equal to 2, it's greater than 2
+// So we move right to middle -1, that is, to 1,
+// and we move middle to 0, where it equals left
+// [1, 2, 3, 4, 5]
+// LM  R
+// Now, left is still less than right, so the loop runs again
+// We reset middle: but it stays at 0
+// We check the conditions. The mid value, 0,
+// is now less than the val we are looking for
+// therefore, we move the left marker forward from middle
+// [1, 2, 3, 4, 5]
+//  M  LR
+// Left and right are now the same, so the loop doesn't run again
+// the condition sortedArr[middle] === val was never met
+// so we erroneously return -1
+
+// On the other hand, if we set the condition to
+// (left <= right)
+// Then the loop runs one more time
+// From this position, left and right are equal
+// [1, 2, 3, 4, 5]
+//  M  LR
+// Middle gets reset (1 + (1-1)/2) = (1+0) = 1
+// In other words, middle gets reset to 1
+// [1, 2, 3, 4, 5]
+//    MLR
+// Now, mid, left, and right have converged.
+// The condition  if (sortedArr[middle] === val)
+// is true, and so the index 1 is returned
+
+// We can use the following for test output:
+//  console.log(`Start of loop: left: ${left}, middle: ${middle}, right: ${right}`);
+
+function binarySearch(sortedArr, val){
+    let left = 0;
+    let right = sortedArr.length - 1;
+    if (sortedArr[right] < val) return -1;
+    if (sortedArr[left] > val) return -1;
+    while (left <= right){
+        let middle = Math.floor(left + (right-left) / 2);
+        if (sortedArr[middle] === val) return middle;
+        if (sortedArr[middle] > val) right = middle - 1;
+        if (sortedArr[middle] < val) left = middle + 1;
+    }
+    return -1;
+}
+
+// Here's my implementation of naive string search
+
+function naiveStringSearch(longStr, subStr){
+    let matchCount = 0;
+
+    for (let i = 0; i < longStr.length; i++){
+        if (longStr[i] === subStr[0]){
+            for (let j = 0; j < subStr.length; j++){
+                if (subStr[j] !== longStr[i + j]) break;
+                if (j === subStr.length - 1) matchCount++;
+            }
+        }
+    }
+
+    return matchCount;
+}
+
+// console.log(naiveStringSearch('wowomgzomg', 'omg'));
+// console.log(naiveStringSearch('wowomgzomg', 'zomg'));
+// console.log(naiveStringSearch('wowomgzomg', 'wowza'));
+
+
+
