@@ -171,3 +171,92 @@ function sortedFrequency(arr, num){
 // console.log(sortedFrequency([1, 1, 2, 2, 2, 2, 3], 3)); // 1
 // console.log(sortedFrequency([1, 1, 2, 2, 2, 2, 3], 1)); // 2
 // console.log(sortedFrequency([1, 1, 2, 2, 2, 2, 3], 4)); // -1
+
+// Write a function called findRotatedIndex which accepts a rotated array of sorted numbers and an integer. The function should return the index of the integer in the array. If the value is not found, return -1.
+//
+// Constraints:
+//
+// Time Complexity - O(log n)
+//
+// Space Complexity - O(1)
+//
+//     findRotatedIndex([3,4,1,2],4) // 1
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8) // 2
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 3) // 6
+//     findRotatedIndex([37,44,66,102,10,22],14) // -1
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 12) // -1
+//     findRotatedIndex([11,12,13,14,15,16,3,5,7,9], 16) // 5
+
+function findRotatedLowestValueIndex(arr){
+    let left = 0;
+    let right = arr.length - 1;
+
+    while (left < right){
+        let mid = Math.floor(left + (right - left) / 2);
+
+        if (arr[mid] > arr[right]){
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return left;
+}
+
+
+function findRotatedIndex(arr, num){
+    let left = 0;
+    let right = arr.length - 1;
+
+    while (left < right){
+        let mid = Math.floor(left + (right - left) / 2);
+
+        if (arr[mid] > arr[right]){
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+   let sequenceStart = left;
+   // we have the lowest number in the sorted array
+   // if the number is larger than the last in the array,
+   // then the number is before the lowest number
+    // otherwise it's afterwards
+   if (num > arr[arr.length - 1]){
+       left = 0;
+       right = sequenceStart;
+   } else {
+       left = sequenceStart;
+       right = arr.length - 1;
+   }
+    while (left <= right){
+        let mid = Math.floor(left + (right-left) / 2);
+        if (arr[mid] === num) return mid;
+        if (arr[mid] > num) right = mid - 1;
+        if (arr[mid] < num) left = mid + 1;
+    }
+    return -1;
+}
+
+console.log(findRotatedIndex([3, 4, 1, 2], 4)); // 1
+console.log(findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8)); // 2
+console.log(findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 3)); // 6
+console.log(findRotatedIndex([37, 44, 66, 102, 10, 22], 14)); // -1
+console.log(findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 12)); // -1
+console.log(findRotatedIndex([11, 12, 13, 14, 15, 16, 3, 5, 7, 9], 16)); // 5
+
+// I could try to figure it out without two runs but 2 log n is log n, so, meh
+
+// Think this through -- [6, 7, 8, 9, 1, 2, 3, 4], 8
+// here let's say mid is at index 3, so points to 9
+// arr[mid] is > arr[right], telling us that the sort start is to the right of mid
+// at the same time, arr[mid] is greater than the target number
+// this means we can test if the target number is between arr[0] and arr[mid]
+// because we know that part of the array is sorted in order
+// if it is between, then we search just that part
+// if it is not between, then we search the right part and keep dividing
+
+// now we have mid at 7
+// we find that arr[mid] is less than arr[right]
+// so we have to search between mid and right
+// so we move left up
