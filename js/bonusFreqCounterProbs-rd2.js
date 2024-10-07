@@ -191,10 +191,10 @@ function isSubsequence(str1, str2){
     return false;
 }
 
-console.log(isSubsequence('hello', 'hello world'));
-console.log(isSubsequence('sing', 'sting'));
-console.log(isSubsequence('abc', 'abracadabra'));
-console.log(isSubsequence('abc', 'acb'));
+// console.log(isSubsequence('hello', 'hello world'));
+// console.log(isSubsequence('sing', 'sting'));
+// console.log(isSubsequence('abc', 'abracadabra'));
+// console.log(isSubsequence('abc', 'acb'));
 
 // check if the first two are the same
 // yes - then advance both
@@ -215,5 +215,204 @@ console.log(isSubsequence('abc', 'acb'));
 // abc
 // abracadabra
 //   k
+
+
+// Sliding Window - maxSubarraySum
+//
+// Given an array of integers and a number, write a function called maxSubarraySum, which finds the maximum sum of a subarray with the length of the number passed to the function.
+//
+// Note that a subarray must consist of consecutive elements from the original array. In the first example below, [100, 200, 300] is a subarray of the original array, but [100, 300] is not.
+//
+//     maxSubarraySum([100,200,300,400], 2) // 700
+//     maxSubarraySum([1,4,2,10,23,3,1,0,20], 4)  // 39
+//     maxSubarraySum([-3,4,0,-2,6,-1], 2) // 5
+//     maxSubarraySum([3,-2,7,-4,1,-1,4,-2,1],2) // 5
+//     maxSubarraySum([2,3], 3) // null
+//
+// Constraints:
+//
+// Time Complexity - O(N)
+//
+// Space Complexity - O(1)
+
+function maxSubarraySum(arr, num){
+    if (arr.length < num) return null;
+    let maxSum = 0;
+    for (let i = 0; i < num; i++){
+        maxSum += arr[i];
+    }
+    if (num === arr.length) return maxSum;
+    let tempSum = maxSum;
+    for (let k = num;  k < arr.length; k++){
+        tempSum = tempSum - arr[k-num] + arr[k];
+        if (tempSum > maxSum) maxSum = tempSum;
+    }
+    return maxSum;
+}
+
+// console.log(maxSubarraySum([100, 200, 300, 400], 2)); // 700
+// console.log(maxSubarraySum([1, 4, 2, 10, 23, 3, 1, 0, 20], 4)); // 39
+// console.log(maxSubarraySum([2,3], 3)); // null
+// console.log(maxSubarraySum([1, 2, 3, 4], 4)) // 10
+// console.log(maxSubarraySum([-3, 4, 0, -2, 6, -1], 2)); // 5
+// console.log(maxSubarraySum([3, -2, 7, -4, 1, -1, 4, -2, 1], 2)); //5
+
+
+// Sliding Window - minSubArrayLen
+//
+// Write a function called minSubArrayLen which accepts two parameters - an array of positive integers and a positive integer.
+//
+// This function should return the minimal length of a contiguous subarray of which the sum is greater than or equal to the integer passed to the function. If there isn't one, return 0 instead.
+// Examples:
+//
+//     minSubArrayLen([2,3,1,2,4,3], 7) // 2 -> because [4,3] is the smallest subarray
+//     minSubArrayLen([2,1,6,5,4], 9) // 2 -> because [5,4] is the smallest subarray
+//     minSubArrayLen([3,1,7,11,2,9,8,21,62,33,19], 52) // 1 -> because [62] is greater than 52
+//     minSubArrayLen([1,4,16,22,5,7,8,9,10],39) // 3
+//     minSubArrayLen([1,4,16,22,5,7,8,9,10],55) // 5
+//     minSubArrayLen([4, 3, 3, 8, 1, 2, 3], 11) // 2
+//     minSubArrayLen([1,4,16,22,5,7,8,9,10],95) // 0
+//
+// Time Complexity - O(n)
+//
+// Space Complexity - O(1)
+
+// Initial solution with troubleshooting outputs
+// function minSubArrayLen(arr, num){
+//     let i =0, j = 1;
+//     let tempSum = arr[i];
+//     console.log(`initial tempSum is ${arr[i]}`);
+//     let minSumLen = 0;
+//     while (j < arr.length){
+//         console.log(`i is ${i} and is at ${arr[i]} and j is ${j} and is at ${arr[j]}`);
+//         tempSum += arr[j];
+//         console.log(`Recalculating tempSum to ${tempSum}`);
+//         if (tempSum >= num){
+//             minSumLen = j - i + 1;
+//             break;
+//         }
+//         j++;
+//     }
+//     console.log(`After initial loop, i is ${i} and j is ${j}`);
+//     if (minSumLen === 0) return minSumLen;
+//     tempSum -= arr[i];
+//     i++;
+//     console.log(`initial tempSum is ${tempSum}`);
+//     while (j < arr.length) {
+//         console.log('Starting loop');
+//         console.log(`i is at ${i} and is ${arr[i]}`);
+//         console.log(`j is at ${j} and is ${arr[j]}`);
+//         if (tempSum >= num) {
+//             console.log("Tempsum greater than num");
+//             console.log(`Recalculating minSumLen, it is now ${j}-${i}+1, which is ${j-i+1}`);
+//             minSumLen = j-i + 1;
+//             console.log("Tempsum greater than num, moving i forward");
+//             i++;
+//             console.log(`Recalculating tempSum, equals ${tempSum} - ${arr[i-1]}, which is:`);
+//             tempSum -= arr[i-1];
+//             console.log(tempSum);
+//         } else {
+//             console.log("tempSum less than num, moving both forward");
+//             console.log(`Recalculating tempSum, equals ${tempSum} - ${arr[i]} + ${arr[j+1]}, which is:`);
+//             if (j !== arr.length - 1) tempSum = tempSum - arr[i] + arr[j+1];
+//             console.log(tempSum);
+//             i++;
+//             j++;
+//         }
+//     }
+//     return minSumLen;
+// }
+
+// Initial solution with console logs cleaned up
+function minSubArrayLen(arr, num){
+    let i =0, j = 1;
+    let tempSum = arr[i];
+    let minSumLen = 0;
+    while (j < arr.length){
+        tempSum += arr[j];
+        if (tempSum >= num){
+            minSumLen = j - i + 1;
+            break;
+        }
+        j++;
+    }
+    if (minSumLen === 0) return minSumLen;
+    tempSum -= arr[i];
+    i++;
+    while (j < arr.length) {
+        if (tempSum >= num) {
+            minSumLen = j-i + 1;
+            i++;
+            tempSum -= arr[i-1];
+        } else {
+            if (j !== arr.length - 1) tempSum = tempSum - arr[i] + arr[j+1];
+            i++;
+            j++;
+        }
+    }
+    return minSumLen;
+}
+
+// console.log(minSubArrayLen([2, 1, 6, 5, 4], 9)); // 2
+// console.log(minSubArrayLen([1, 4, 16, 22, 5, 7, 8, 9, 10], 39)); // 3
+// console.log(minSubArrayLen([1,4,16,22,5,7,8,9,10],95)); // 0
+// console.log(minSubArrayLen([1, 4, 16, 22, 5, 7, 8, 9, 10], 55)); // 5
+// console.log(minSubArrayLen([3,1,7,11,2,9,8,21,62,33,19], 52)); // 1
+// console.log(minSubArrayLen([2, 1, 6, 5, 4], 9)); // 2
+console.log(minSubArrayLen([2, 3, 1, 2, 4, 3], 7)); // 2
+
+// try this: start i and j at 0
+// start a tempSum at the value of arr[0]
+// while j is less than the array length
+// carry a running sum until you find the sum is greater than num
+// at that point, you set your minSubLen
+// now you have to move i over by 1 and recalculate
+// if the new sum is still greater than num
+// you keep moving i over until it isn't
+// if it isn't, you move the whole window over
+// you recalculate tempSum and if it's greater, adjust minSubLen
+
+// So here
+// You start by running
+// is 2 >= num?
+// no, so move j over
+// is 3 >= num?
+// no, so move j over
+// is 9 >= num?
+// yes. So set base minSubLen
+
+// now we contract the window to one less than 3
+// so 2, so start i at 1 and j at 2
+
+//  i
+// [2,1,6,5,4]
+//    j
+
+
+// OK try this
+//minSubArrayLen([1, 4, 16, 22, 5, 7, 8, 9, 10], 39)
+// first we calculate the first instance of a subarray with
+// a sum greater than 39
+// it's 1 through 22, a length of 4 totaling 43
+// 1 + 4 = 5 (l2), + 16 = 21 (l3), + 22 = 43 (l4)
+
+// Now we slide the window forward one at i, so it's 4 through 22
+// We recalculate the sum, it's now 43-1, which is 42
+// so we adjust the minSubLen, move the window forward at i, and
+// recalculate the tempSum
+
+// Sliding Window - findLongestSubstring
+//
+// Write a function called findLongestSubstring, which accepts a string and returns the length of the longest substring with all distinct characters.
+//
+//     findLongestSubstring('') // 0
+//     findLongestSubstring('rithmschool') // 7
+//     findLongestSubstring('thisisawesome') // 6
+//     findLongestSubstring('thecatinthehat') // 7
+//     findLongestSubstring('bbbbbb') // 1
+//     findLongestSubstring('longestsubstring') // 8
+//     findLongestSubstring('thisishowwedoit') // 6
+//
+// Time Complexity - O(n)
 
 
