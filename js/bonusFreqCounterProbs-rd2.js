@@ -359,7 +359,7 @@ function minSubArrayLen(arr, num){
 // console.log(minSubArrayLen([1, 4, 16, 22, 5, 7, 8, 9, 10], 55)); // 5
 // console.log(minSubArrayLen([3,1,7,11,2,9,8,21,62,33,19], 52)); // 1
 // console.log(minSubArrayLen([2, 1, 6, 5, 4], 9)); // 2
-console.log(minSubArrayLen([2, 3, 1, 2, 4, 3], 7)); // 2
+// console.log(minSubArrayLen([2, 3, 1, 2, 4, 3], 7)); // 2
 
 // try this: start i and j at 0
 // start a tempSum at the value of arr[0]
@@ -414,5 +414,132 @@ console.log(minSubArrayLen([2, 3, 1, 2, 4, 3], 7)); // 2
 //     findLongestSubstring('thisishowwedoit') // 6
 //
 // Time Complexity - O(n)
+
+// Initial solution with debug outputs
+// function findLongestSubstring(str){
+//     let longestSubstring = 0;
+//     if (str.length === 0) return longestSubstring;
+//     const map = {}
+//     map[str[0]] = 0;
+//     let i = 0, j = 1;
+//     while (j < str.length){
+//         console.log(`At loop start map is ${JSON.stringify(map)}`);
+//         console.log(`At loop start i is ${i} and points to ${str[i]}`);
+//         console.log(`At loop start j is ${j} and points to ${str[j]}`);
+//         if (str[j] in map) {
+//             console.log(`found ${str[j]} in map at ${map[str[j]]}`);
+//             i = map[str[j]] + 1;
+//             map[str[j]] = j;
+//             for (let char in map){
+//                 if (map[char] < i) delete map[char];
+//             }
+//             j++;
+//             console.log(`indexes moved to ${i} and ${j}`);
+//         } else {
+//             console.log(`Did not find ${str[j]} in map, so adding it`);
+//             map[str[j]] = j;
+//             j++;
+//             console.log(`indexes moved to ${i} and ${j}`);
+//         }
+//         if ((j - i) > longestSubstring) longestSubstring = j - i;
+//     }
+//     return longestSubstring;
+// }
+
+function findLongestSubstring(str){
+    let longestSubstring = 0;
+    if (str.length === 0) return longestSubstring;
+    const map = {}
+    map[str[0]] = 0;
+    let i = 0, j = 1;
+    while (j < str.length){
+        if (str[j] in map) {
+            i = map[str[j]] + 1;
+            map[str[j]] = j;
+            for (let char in map){
+                if (map[char] < i) delete map[char];
+            }
+            j++;
+        } else {
+            map[str[j]] = j;
+            j++;
+        }
+        if ((j - i) > longestSubstring) longestSubstring = j - i;
+    }
+    return longestSubstring;
+}
+
+// console.log(findLongestSubstring('rithmschool')); // 7
+// console.log(findLongestSubstring('thisisawesome')); // 6
+// console.log(findLongestSubstring('thecatinthehat')); // 7
+// console.log(findLongestSubstring('bbbbbb')); // 1
+// console.log(findLongestSubstring('longestsubstring')); // 8
+// console.log(findLongestSubstring('thisishowwedoit')); // 6
+
+// rithmschool
+// OK here basically we set the initial window to 0 and 1
+// at each iteration we add elements to a map
+// the map will be letter:index
+// then we extend out the end of the window as long as
+// the end does not have a match in the map
+// as soon as we do find identity between end and map element
+// we move the window start up to map index + 1
+
+// Frequency Counter - constructNote
+//
+// Write a function called constructNote, which accepts two strings, a message and some letters. The function should return true if the message can be built with the letters that you are given, or it should return false.
+//
+// Assume that there are only lowercase letters and no space or special characters in both the message and the letters.
+//
+// Bonus Constraints:
+//
+// If M is the length of message and N is the length of letters:
+//
+// Time Complexity: O(M+N)
+//
+// Space Complexity: O(N)
+//
+// Examples:
+//
+//     constructNote('aa', 'abc') // false
+//     constructNote('abc', 'dcba') // true
+//     constructNote('aabbcc', 'bcabcaddff') // true
+
+// Frequency Counter - findAllDuplicates
+//
+// Given an array of positive integers, some elements appear twice and others appear once. Find all the elements that appear twice in this array. Note that you can return the elements in any order.
+//
+//     findAllDuplicates([4,3,2,7,8,2,3,1]) // array with 2 and 3
+//     findAllDuplicates([4, 3, 2, 1, 0]) // []
+//     findAllDuplicates([4, 3, 2, 1, 0, 1, 2, 3]) // array with 3, 2, and 1
+//
+// Time Complexity - O(n)
+
+// Frequency Counter / Multiple Pointer - findPair
+//
+// Given an unsorted array and a number n, find if there exists a pair of elements in the array whose difference is n. This function should return true if the pair exists or false if it does not.
+//
+//     findPair([6,1,4,10,2,4], 2) // true
+//     findPair([8,6,2,4,1,0,2,5,13],1) // true
+//     findPair([4,-2,3,10],-6) // true
+//     findPair([6,1,4,10,2,4], 22) // false
+//     findPair([], 0) // false
+//     findPair([5,5], 0) // true
+//     findPair([-4,4], -8) // true
+//     findPair([-4,4], 8) // true
+//     findPair([1,3,4,6],-2) // true
+//     findPair([0,1,3,4,6],-2) // true
+//
+// Part 1 - solve this with the following requirements:
+//
+// Time Complexity Requirement - O(n)
+//
+// Space Complexity Requirement - O(n)
+//
+// Part 2 - solve this with the following requirements:
+//
+// Time Complexity Requirement - O(n log n)
+//
+// Space Complexity Requirement - O(1)
 
 
