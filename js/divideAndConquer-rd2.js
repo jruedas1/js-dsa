@@ -48,10 +48,26 @@
 //     return -1;
 // }
 
+// Second solution, corrections to
+// if conditions and loop condition
+// function binarySearch(arr, num){
+//     let left = 0;
+//     let right = arr.length - 1;
+//     let middle = Math.floor(right / 2);
+//     while (left <= right){
+//         if (arr[middle] === num) return middle;
+//         if (arr[middle] < num) left = middle + 1;
+//         if (arr[middle] > num) right = middle - 1;
+//         middle = Math.floor((right + left)/2);
+//     }
+//     return -1;
+// }
+
+// final version, correction to initialization of middle
 function binarySearch(arr, num){
     let left = 0;
     let right = arr.length - 1;
-    let middle = Math.floor(right / 2);
+    let middle = Math.floor((left + right) / 2);
     while (left <= right){
         if (arr[middle] === num) return middle;
         if (arr[middle] < num) left = middle + 1;
@@ -80,6 +96,7 @@ console.log(binarySearch([
 ], 100)); // -1
 
 // Note that initially I tried left = middle and right = middle, which causes an infinite loop in some cases. Here's what ChatGPT had to say about it afterwards:
+
 // The reason the binary search algorithm fails when you set `left = middle` or `right = middle` instead of adjusting them by `+1` or `-1` is that it causes an infinite loop. Here's why:
 //
 // In each iteration of binary search, the goal is to reduce the search space by eliminating half of the elements. When the middle element is compared to the target value, one of two cases happens:
@@ -94,6 +111,8 @@ console.log(binarySearch([
 // By adjusting the `left` and `right` pointers by `+1` or `-1`, you ensure that the middle element is excluded from the new search space, allowing the algorithm to eventually converge when `left` and `right` meet or cross each other.
 //
 // This adjustment is crucial to correctly narrowing down the search range and preventing infinite loops.
+
+//*****
 
 // Another issue is that the pseudocode given stated to continue the loop while left is less than right. Trying this leads to failures in several cases. Adjusting it to while left <= right fixed the problem. Here is what ChatGPT had to say about that:
 
@@ -127,3 +146,21 @@ console.log(binarySearch([
 //
 // ### Key Difference:
 // Using `while (left <= right)` ensures that **every element in the search range is checked**, including the last one, preventing the algorithm from exiting too early.
+
+// note also that my solution last time was a little different: check **all* the positions every time:
+
+// function binarySearch(sortedArr, val){
+//   let left = 0;
+//    let right = sortedArr.length - 1;
+//    if (sortedArr[right] < val) return -1;
+//    if (sortedArr[left] > val) return -1;
+//    while (left < right){
+//        let middle = Math.floor(left + (right-left) / 2);
+//        if (sortedArr[left] === val) return left;
+//        if (sortedArr[right] === val) return right;
+//        if (sortedArr[middle] === val) return middle;
+//        if (sortedArr[middle] > val) right = middle + 1;
+//        if (sortedArr[middle] < val) left = middle - 1;
+//    }
+//    return -1;
+// }
