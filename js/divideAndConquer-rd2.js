@@ -164,3 +164,42 @@ console.log(binarySearch([
 //    }
 //    return -1;
 // }
+
+// Divide and Conquer - countZeroes
+//
+// Given an array of 1s and 0s which has all 1s first followed by all 0s, write a function called countZeroes, which returns the number of zeroes in the array.
+//
+//     countZeroes([1,1,1,1,0,0]) // 2
+//     countZeroes([1,0,0,0,0]) // 4
+//     countZeroes([0,0,0]) // 3
+//     countZeroes([1,1,1,1]) // 0
+//
+// Time Complexity - O(log n)
+
+
+// Divide and Conquer - sortedFrequency
+//
+// Given a sorted array and a number, write a function called sortedFrequency that counts the occurrences of the number in the array
+//
+//     sortedFrequency([1,1,2,2,2,2,3],2) // 4
+//     sortedFrequency([1,1,2,2,2,2,3],3) // 1
+//     sortedFrequency([1,1,2,2,2,2,3],1) // 2
+//     sortedFrequency([1,1,2,2,2,2,3],4) // -1
+//
+// Time Complexity - O(log n)
+
+
+// Write a function called findRotatedIndex which accepts a rotated array of sorted numbers and an integer. The function should return the index of the integer in the array. If the value is not found, return -1.
+//
+// Constraints:
+//
+// Time Complexity - O(log n)
+//
+// Space Complexity - O(1)
+//
+//     findRotatedIndex([3,4,1,2],4) // 1
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 8) // 2
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 3) // 6
+//     findRotatedIndex([37,44,66,102,10,22],14) // -1
+//     findRotatedIndex([6, 7, 8, 9, 1, 2, 3, 4], 12) // -1
+//     findRotatedIndex([11,12,13,14,15,16,3,5,7,9], 16) // 5
