@@ -242,3 +242,28 @@ function fib(num){
 // console.log(fib(11));
 // console.log(fib(28));
 // console.log(fib(35));
+
+// reverse
+//
+// Write a recursive function called reverse which accepts a string and returns a new string in reverse.
+
+function reverse(str){
+    let revStr = '';
+    function helper(helperInput){
+        if (helperInput.length === 0) return false;
+        revStr += helperInput[helperInput.length - 1];
+        helper(helperInput.substring(0, helperInput.length - 1));
+    }
+    helper(str);
+    return revStr;
+}
+
+let str1 = 'riddimman';
+// console.log(reverse(str1));
+
+function reversePure(str){
+    if (str.length === 0) return '';
+    return str[str.length - 1] + reversePure(str.substring(0, str.length - 1));
+}
+
+console.log(reversePure(str1));
