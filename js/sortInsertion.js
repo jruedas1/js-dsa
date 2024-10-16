@@ -189,3 +189,6 @@ const arr1 = [23, 48, 147, 34, 12, 18, 242, 87, 8, 81];
 // it does in some cases minimize the time spent on the search
 // for the insertion point but doesn't change the big O of the
 // insertion sort as a whole
+
+// so you would have to find a way of doing it with just swap
+// We'll leave that for another day
