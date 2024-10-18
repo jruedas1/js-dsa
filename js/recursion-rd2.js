@@ -266,4 +266,478 @@ function reversePure(str){
     return str[str.length - 1] + reversePure(str.substring(0, str.length - 1));
 }
 
-console.log(reversePure(str1));
+// console.log(reversePure(str1));
+
+
+//Write a recursive function called isPalindrome which returns true if the string passed to it is a palindrome (reads the same forward and backward). Otherwise, it returns false.
+
+// isPalindrome('awesome') // false
+// isPalindrome('foobar') // false
+// isPalindrome('tacocat') // true
+// isPalindrome('amanaplanacanalpanama') // true
+// isPalindrome('amanaplanacanalpandemonium') // false
+
+// My first thought is to leverage the recursive function
+// that I already wrote as a helper function
+// and just use that to check if it's a palindrome
+// function isPalindrome(str){
+//     function reversePure(str){
+//         if (str.length === 0) return '';
+//         return str[str.length - 1] + reversePure(str.substring(0, str.length - 1));
+//     }
+//     return str === reversePure(str);
+// }
+
+// But we can do better than that
+// What we want to do is reduce the string one
+// char at a time from the beginning and the end
+// and check the match every time,
+// returning false if we ever get a mismatch,
+// otherwise returning true
+function isPalindrome(str){
+    let itsAPalindrome = str[0] === str[str.length-1];
+    if (str.length <= 1 || !itsAPalindrome) return itsAPalindrome;
+    return isPalindrome(str.substring(1, str.length-1));
+}
+
+// console.log(isPalindrome('tacocat'));
+// let str = 'tacocat';
+// console.log(str[0], str[str.length - 1]);
+// tacocat
+//   true
+//    returns acoca
+//          true
+                // returns coc
+//                    true
+//                 // returns o
+//                            // should return true
+// console.log(isPalindrome('amanaplanacanalpandemonium'));
+// console.log(isPalindrome('amanaplanacanalpanama'));
+// console.log(isPalindrome('awesome')); // false
+// console.log(isPalindrome('foobar')); // false
+// console.log(isPalindrome('racocar'))
+
+// Write a recursive function called someRecursive
+// which accepts an array and a callback.
+// The function returns true if
+// a single value in the array returns true
+// when passed to the callback.
+// Otherwise, it returns false.
+
+// SAMPLE INPUT / OUTPUT
+const isOdd = val => val % 2 !== 0;
+const arr = [2, 3, 6, 8, 10];
+const arr2 = [2, 4, 6, 8, 10];
+
+// console.log(someRecursive([1, 2, 3, 4], isOdd)); // true
+// console.log(someRecursive([4, 6, 8, 9], isOdd)); // true
+// console.log(someRecursive([4, 6, 8], isOdd)); // false
+// console.log(someRecursive([4, 6, 8], val => val > 10)); // false
+
+function someRecursive(arr, callback){
+    if (arr.length === 0) return false;
+    if (callback(arr[arr.length - 1])) return true;
+    return someRecursive(arr.slice(0, arr.length - 1), callback);
+}
+
+// console.log(someRecursive(arr, isOdd));
+// console.log(someRecursive([4, 6, 8], val => val > 10)); // false
+// console.log(someRecursive([4, 6, 8, 11, -3, -56], val => val > 10));
+
+
+// Write a recursive function
+// called flatten which accepts
+// an array of arrays and returns
+// a new array with all values flattened.
+
+// Helper method recursion
+
+// function collectOdds(arr){
+//     const result = [];
+//     function helper(helperInput){
+//         if (helperInput.length === 0){
+//             return false;
+//         }
+//         if (helperInput[0] % 2 !== 0){
+//             result.push(helperInput[0]);
+//         }
+//         helper(helperInput.slice(1));
+//     }
+//     helper(arr);
+//     return result;
+// }
+
+// pure recursion version
+// function collectOddValues(arr){
+//     let newArr = [];
+//     if (arr.length === 0){
+//         return newArr;
+//     }
+//     if (arr[0] % 2 !== 0) newArr.push(arr[0]);
+//     newArr = newArr.concat(collectOddValues(arr.slice(1)));
+//     return newArr;
+// }
+
+function flatten(arr){
+    const flattened = [];
+    function helper(helperInput){
+        if (helperInput.length === 0) return false;
+        if (Array.isArray(helperInput[0])){
+          helper(helperInput[0]);
+        } else {
+            flattened.push(helperInput[0]);
+        }
+        return helper(helperInput.slice(1));
+    }
+    helper(arr);
+    return flattened;
+}
+
+function flattenPure(arr){
+    let flattened = [];
+    if (arr.length === 0) return flattened;
+    if (Array.isArray(arr[0])){
+        flattened = flattened.concat(flattenPure(arr[0]));
+    } else {
+        flattened.push(arr[0]);
+    }
+    flattened = flattened.concat(flattenPure(arr.slice(1)));
+    return flattened;
+}
+
+// For the pure version
+// Think about this, if I have
+// [1, 2, 3, [4, 5]]
+// arr.length at start is not 0
+// it pushes arr[0] into flattened
+// and then it runs the thing again on the slice,
+// which pushes 2 into its own array
+// then it runs again, and this pushes 3 into its own array
+// all those arrays are sitting there in their own layers of the call stack
+// then it meets a subarray
+
+
+// console.log(flatten([1, 2, 3, 4, 5]));
+// console.log(Array.isArray(1))
+// console.log(Array.isArray([2]))
+// console.log(flatten([1, 2, 3, [4, 5]]));  // [1, 2, 3, 4, 5]
+// console.log(flatten([1, [2, [3, 4], [[5]]]])); // [1, 2, 3, 4, 5]
+// flatten([[1],[2],[3]]) // [1,2,3]
+// console.log(flatten([[[[1], [[[2]]], [[[[[[[3]]]]]]]]]])); // [1,2,3]
+// console.log([1, 2, 3, [4, 5]].slice(0, -1))
+
+// console.log(flattenPure([1, 2, 3, [4, 5]]));
+// console.log(flattenPure([1, [2, [3, 4], [[5]]]]));
+
+// Here is my explanation for how it works, from my first round
+
+// How this works:
+// Assuming the array [1, 2, [3, 4]]
+// callstack lvl 1
+// The first thing it does is check if arr[0] (1) is an array
+// it isn't, so it pushes it into accArr. accArr is now [1]
+// it is then instructed to concatenate accArr with the result
+// of running flattenPure on arr.slice(1), which is [2, [3, 4]]
+    // now it runs flattenPure a second time (callstack lvl 2)
+    // it checks if arr[0] (== 2) is an array
+    // it isn't, so it pushes it into accArr, which is []
+    // accArr here is [2]
+    // now it wants to concatenate [2] with the result of running
+    // flattenPure on arr.slice(1), which is here [3, 4]
+        // callStack lvl 3
+        // this is an array, so it runs flattenPure on it
+        // accArr here remains [], pending the results of
+        // concatenating flattenPure([3, 4]) with accArr []
+            // callStack lvl 4
+            // arr[0] is 3, so that gets pushed into accArr.
+            // accArr is now [3]
+            // it wants to concatenate [3] with the result of
+            // running flattenPure on [4]
+                // callStack lvl 5
+                // accArr becomes [4]
+                // now the algorithm slices once more, this gives
+                    // callStack lvl 6
+                    // an array of [] which gets passed to flattenPure
+                    // here the recursion ends, because this
+                    // returns [] and does not call flattenPure again
+                // now [] gets returned up to level 5, where [4]
+                // waits to concatenate, so [4] + [] == [4]
+            // [4] gets returned to level 4, where [3] awaits
+            // [3] + [4] == [3, 4]
+        // [3, 4] gets returned to level 3, where [] awaits
+        // this remains [3, 4]
+    // [3, 4] gets returned to level 2, where [2] awaits
+// we get [2, 3, 4] returned to level 1, where [1] waits
+// we get [1, 2, 3, 4]
+
+// capitalizeFirst
+//
+// Write a recursive function called capitalizeFirst. Given an array of strings, capitalize the first letter of each string in the array.
+
+function capitalizeFirst(arr){
+    let capArr = [];
+    if (arr.length === 0) return capArr;
+    capArr.push(arr[0].charAt(0).toLocaleUpperCase() + arr[0].substring(1));
+    capArr = capArr.concat(capitalizeFirst(arr.slice(1)));
+    return capArr;
+}
+
+const strArr = ["yo", "hey", "whoot"];
+// console.log(capitalizeFirst(strArr));
+
+// nestedEvenSum
+//
+// Write a recursive function called nestedEvenSum.
+// Return the sum of all even numbers
+// in an object which may contain nested objects.
+
+const obj1 = {
+    outer: 2,
+    obj: {
+        inner: 2,
+        otherObj: {
+            superInner: 2,
+            notANumber: true,
+            alsoNotANumber: "yup"
+        }
+    }
+}
+
+for (let key in obj1){
+    // console.log(key)
+    // console.log(obj1[key]);
+}
+
+const obj2 = {
+    a: 2,
+    b: {b: 2, bb: {b: 3, bb: {b: 2}}},
+    c: {c: {c: 2}, cc: 'ball', ccc: 5},
+    d: 1,
+    e: {e: {e: 2}, ee: 'car'}
+};
+
+const obj3 = {
+    a: 2,
+    b: 3,
+    c: 4,
+    d: 5
+}
+
+const obj4 = {
+    a: 2,
+    b: 3,
+    c: 4,
+    d: {a: 2}
+}
+
+function nestedEvenSum(obj){
+    const values = Object.values(obj);
+    let total = 0;
+    if (values.length === 0) return total;
+    if (typeof values[0] === 'object') total = nestedEvenSum(values[0]);
+    if (!isNaN(parseInt(values[0])) && values[0] % 2 === 0) total += values[0];
+    return total + nestedEvenSum(values.slice(1));
+}
+
+// console.log(nestedEvenSum(obj4));
+// console.log(nestedEvenSum(obj1)); // 6
+// console.log(nestedEvenSum(obj2)); // 10
+
+// Write a recursive function called capitalizeWords. Given an array of words, return a new array containing each word capitalized.
+
+function capitalizeWords(strArr){
+    let capArr = [];
+    if (strArr.length === 0) return capArr;
+    capArr.push(strArr[0].toLocaleUpperCase());
+    return capArr.concat(capitalizeWords(strArr.slice(1)));
+}
+
+let words = ['i', 'am', 'learning', 'recursion'];
+// console.log(capitalizeWords(words)); // ['I', 'AM', 'LEARNING', 'RECURSION'];
+
+// stringifyNumbers
+//
+// Write a function called stringifyNumbers
+// which takes in an object and finds
+// all the values which are numbers
+// and converts them to strings.
+// Recursion would be a great way to solve this!
+//
+// The exercise intends for you to
+// create a new object with
+// the numbers converted to strings,
+// and not modify the original.
+// Keep the original object unchanged.
+
+
+let obj5 = {
+    num: 1,
+    test: [],
+    data: {
+        val: 4,
+        info: {
+            isRight: true,
+            random: 66
+        }
+    }
+}
+
+
+// stringifyNumbers(obj)
+
+/*
+{
+    num: "1",
+    test: [],
+    data: {
+        val: "4",
+        info: {
+            isRight: true,
+            random: "66"
+        }
+    }
+}
+*/
+
+const simpleObj = { num1: 3, string: "yo", num2: 5}
+
+function stringifyNumbers(obj){
+    const stringsObj = obj;
+    for (const [key, val] of  Object.entries(stringsObj)){
+        if (typeof val === 'object') stringifyNumbers(val);
+        if (typeof val === 'number') stringsObj[key] = val.toString();
+    }
+    return stringsObj;
+}
+
+// console.log(stringifyNumbers(simpleObj));
+// console.log(stringifyNumbers(obj5));
+
+// collectStrings
+//
+// Write a function called collectStrings
+// which accepts an object and returns
+// an array of all the values in the object
+// that have a typeof string
+
+const obj = {
+    stuff: "foo",
+    data: {
+        val: {
+            thing: {
+                info: "bar",
+                moreInfo: {
+                    evenMoreInfo: {
+                        weMadeIt: "baz"
+                    }
+                }
+            }
+        }
+    }
+}
+
+const simpleObj2 = {a: 1, b: [], c: 'yo'}
+
+function collectStrings(obj){
+    const values = Object.values(obj);
+    let stringsArr = [];
+    if (values.length === 0) return stringsArr;
+    if (typeof values[0] === 'object') stringsArr = stringsArr.concat(collectStrings(values[0]));
+    if (typeof values[0] === 'string') stringsArr.push(values[0]);
+    return stringsArr.concat(collectStrings(values.slice(1)));
+}
+
+// console.log(collectStrings(simpleObj2));
+// console.log(collectStrings(obj));
+
+// After all this, keep in mind the following interchange
+// in the course questions section
+
+// Section - 9: Falttering
+// 0 upvotes
+// Madhuvaran · Lecture 55
+// · 10 months ago
+//
+// Hi,
+//
+//
+// Flattening a array using recursion, But you have added solution with iterations. Can you please verify this Solution?
+//
+// function flatten(array, concatArray = []) {
+//      if (array.length === 0) return concatArray;
+//      const firstElement = array[0];
+//      if (!Array.isArray(firstElement))return flatten(array.splice(1), concatArray.concat(firstElement));
+//      return flatten(array.splice(1), flatten(firstElement, concatArray)); }
+// 1 reply
+// AS
+// Akshay
+// 1 upvote
+// 10 months ago
+//
+// Hi Madhuvaran,
+//
+// The provided code is correct and implements a function for flattening an array. However, there are some minor issues and potential for improvement.
+//
+// The logic for handling non-array elements is duplicated. This can be refactored to improve maintainability. Also, the code repeatedly creates new copies of the concatArray inside the recursive calls. This can be inefficient for large arrays.
+//
+// Improved version:
+//
+//     function flatten(array, result = []) {
+//       for (const element of array) {
+//         if (Array.isArray(element)) {
+//           flatten(element, result);
+//         } else {
+//           result.push(element);
+//         }
+//       }
+//       return result;
+//     }
+//
+// This version addresses the issues mentioned before:
+//
+// It iterates using of loop for cleaner and more concise code.
+//
+// It avoids unnecessary splice and replaces it with push for efficient manipulation.
+//
+// It handles both array and non-array elements with a single conditional statement.
+//
+// It uses a single result variable throughout the recursion to improve performance.
+//
+// Please feel free to ask if you have any questions.
+//
+// Kind regards,
+// Akshay
+//
+// Join the course Discord chat community here. Find free tutorials and tips by Colt here.
+
+// The thing to note here is that the technique
+// demonstrated by the instructor himself --
+// where at each level of the recursion, a small single-element
+// array is created, and as the recursion ends and the
+// function calls are popped off the stack,
+// all the arrays are concatenated --
+// is inefficient, and it is better to have a main logic
+// that iterates and pushes into a single array,
+// and a recursive call that uses iterative logic
+
+// in addition, as I discovered myself in writing
+// my solution to stringify numbers, that approach,
+// as mentioned by Akshay here, creates a very
+// readable code
+// it is not necessary to assume, as I did for much
+// of these exercises, that in writing a "recursive"
+// solution, one should entirely avoid iteration
+
+// finally note the emphasis on using push and pop
+// where possible as opposed to splice or slice
+
+// note also that slicing from the beginning (slice(1))
+// is less efficient than slicing from the end (slice(-1))
+// that is, popping, as it forces a reindex of the whole array
+
+// Still, on the whole, if the point was to study recursion --
+// rather than to create very efficient and readable algorithms --
+// the more purely recursive solutions I explored were apropos
+// but the solution that more closely follows Akshay's recommendations
+// -- stringifyNumbers -- definitely is clearer, more efficient, and
+// more readable by far
