@@ -653,7 +653,7 @@ function collectStrings(obj){
 // After all this, keep in mind the following interchange
 // in the course questions section
 
-// Section - 9: Falttering
+// Section - 9: Flattening
 // 0 upvotes
 // Madhuvaran · Lecture 55
 // · 10 months ago
@@ -661,7 +661,7 @@ function collectStrings(obj){
 // Hi,
 //
 //
-// Flattening a array using recursion, But you have added solution with iterations. Can you please verify this Solution?
+// Flattening an array using recursion, But you have added solution with iterations. Can you please verify this Solution?
 //
 // function flatten(array, concatArray = []) {
 //      if (array.length === 0) return concatArray;
