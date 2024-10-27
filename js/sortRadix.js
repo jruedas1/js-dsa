@@ -116,3 +116,47 @@ const testArr = [12, 122, 1234, 1334, 18, 99145]; // 5
 
 // console.log(mostDigits(testArr));
 
+// Radix Sort
+// Define a function that accepts a list of numbers
+// Figure out how many digits the largest number has
+
+const testArr2 = [3221, 1, 10, 9680, 577, 9420, 7, 5622, 4793, 2030, 3138, 82, 2599, 743, 4127];
+
+// function radixSort(arr){
+//     const maxDigits = mostDigits(arr);
+//     for (let k = 0; k < maxDigits; k++){
+//         const buckets = [[], [], [], [], [], [], [], [], [], []];
+//         for (let i = 0; i < arr.length; i++){
+//             const digit = getDigit(arr[i], k);
+//             buckets[digit].push(arr[i]);
+//         }
+//         arr = buckets.flat();
+//     }
+//     return arr;
+// }
+
+// Unfortunately, the test suite again does not use
+// the latest JS syntax
+// In this case, it doesn't seem to recognize .flat()
+
+function radixSort(arr){
+    const maxDigits = mostDigits(arr);
+    for (let k = 0; k < maxDigits; k++){
+        const buckets = [[], [], [], [], [], [], [], [], [], []];
+        for (let i = 0; i < arr.length; i++){
+            const digit = getDigit(arr[i], k);
+            buckets[digit].push(arr[i]);
+        }
+        arr = buckets.reduce((acc, val) => acc.concat(val), []);
+    }
+    return arr;
+}
+
+console.log(radixSort(testArr2));
+
+// In the instructor solution, he has a nice way to generate
+// the buckets
+// let buckets = Array.from({length: 10}, () => []);
+// He also does a concat
+// nums = [].concat(...buckets)
+// which, I didn't realize concat could do more than one at a time
