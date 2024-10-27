@@ -48,13 +48,15 @@ function pivot(arr, start = 0, end = arr.length - 1){
         }
     }
     [arr[start], arr[pivotIndex]] = [arr[pivotIndex], arr[start]];
-    console.log(`At the end of pivot, arr is ${arr}`);
+    console.log(`Array at end of pivot: ${arr}`);
     return pivotIndex;
 }
 
+
+
 // Example array
-// const testArr = [24, 48, 2, 35, 8, 12, 67];
-// console.log(pivot(testArr));
+const testArr = [24, 48, 2, 35, 8, 12, 67];
+console.log(pivot(testArr));
 
 // Quicksort pseudocode
 // Call the pivot helper on the array
@@ -79,7 +81,7 @@ function pivot(arr, start = 0, end = arr.length - 1){
 //     quickSort(arr);
 //     return arr;
 // }
-const testArr = [24, 48, 2, 35, 8, 12, 67];
+// const testArr = [24, 48, 2, 35, 8, 12, 67];
 // console.log(pivot(testArr));
 // console.log(pivot(testArr, pivot(testArr) + 1, testArr.length - 1))
 // console.log(quickSort(testArr));
@@ -105,6 +107,9 @@ const testArr2 = [34, 289, 12, 56, 24, 89, 6, 78, 567, 2];
 // to end the recursion,
 // the whole recursion is wrapped in an if statement,
 // so it stops running if the condition isn't met
+// The fact the base case is a comparison of end and start
+// had definitely occurred to me, but not a
+// straightforward comparison
 
 function quickSort(arr, left = 0, right = arr.length - 1){
     if (left < right){
@@ -115,8 +120,32 @@ function quickSort(arr, left = 0, right = arr.length - 1){
     return arr;
 }
 
-console.log(quickSort(testArr));
+// console.log(quickSort(testArr));
 console.log(quickSort(testArr2));
+
+// Here's the version of pivot with a comparator
+function pivotWithComp(arr, comparator=(a,b)=>a-b, start=0, end=arr.length - 1){
+    const pivotEl = arr[start];
+    let pivotIndex = start;
+    for (let i = start + 1; i <= end; i++){
+        if (comparator(arr[i], pivotEl) < 0)   {
+            pivotIndex++;
+            [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+        }
+    }
+    [arr[start], arr[pivotIndex]] = [arr[pivotIndex], arr[start]];
+    return pivotIndex;
+}
+
+// and the quick sort with a comparator
+function quickSortWithComp(arr, comparator=(a,b)=>a-b, left=0, right=arr.length-1) {
+    if (left < right){
+        const pivotIndex = pivotWithComp(arr, comparator, left, right);
+        quickSortWithComp(arr, comparator, left, pivotIndex - 1);
+        quickSortWithComp(arr, comparator, pivotIndex + 1, right);
+    }
+    return arr;
+}
 
 
 
