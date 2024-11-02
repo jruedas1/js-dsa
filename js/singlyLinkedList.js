@@ -310,7 +310,7 @@ class SinglyLinkedList {
     // That wouldn't work in the course test suite, which doesn't
     // come preloaded with unshift
 
-    set(value, position){
+    set(position, value){
         if (position > this.length || position < 0) return false;
         if (position === this.length) {
             this.push(value);
@@ -324,6 +324,10 @@ class SinglyLinkedList {
         }
         return true;
     }
+
+    // Question, wouldn't this.push just be this.tail.next = new Node(value)?
+    // the answer is yes ... but that's what push does anyway,
+    // and this way you catch the case in which it's an empty linked list
 
     // insert pseudocode
     // if index to insert to is less than 0 or > length, return false
@@ -356,6 +360,166 @@ class SinglyLinkedList {
         this.length++;
         return true;
     }
+
+    // remove 1st attempt with no instructor pseudocode
+    // remove(index){
+    //     if (this.length < 1 || index < 0 || index > this.length - 1) return undefined;
+    //     if (this.length === 1) {
+    //         this.head = null;
+    //         this.length = null;
+    //     }
+    //     const targetPrev = this.get(index - 1);
+    //     const targetNode = targetPrev.next;
+    //     targetPrev.next = targetPrev.next.next;
+    //     this.length--;
+    //     return targetNode;
+    // }
+
+    // Colt's pseudocode -- I did forget one scenario,
+    // the case where index is length - 1
+    // OK two scenarios
+    // also if the index is 0, shift
+    // He says to return the value of the removed node
+    // but if you do that the test fails, you have to return the node
+
+    // If the index is less than zero or greater than
+    // the length, return undefined
+    // If the index is the same as length - 1, pop
+    // If the index is zero, shift
+    // Otherwise, using the get method, access the node at the index -1
+    // Set the next property of on that node to be the next of the next node
+    // Decrement the length
+    // Return the value of the node removed
+
+    remove(index){
+        if (this.length < 1 || index < 0 || index > this.length - 1) return undefined;
+        if (this.length === 1) {
+            const soleNode = this.head;
+            this.head = null;
+            this.length = null;
+            return soleNode.val;
+        }
+        if (index === 0) this.shift();
+        if (index === this.length - 1) this.pop();
+        const targetPrev = this.get(index - 1);
+        const targetNode = targetPrev.next;
+        targetPrev.next = targetPrev.next.next;
+        this.length--;
+        return targetNode;
+    }
+
+    // reverse - version 1, no pseudocode used
+    // reverse(){
+    //     let start = 0;
+    //     let end = this.length - 1;
+    //     while (start < end){
+    //         const startVal = this.get(start).val;
+    //         const endVal = this.get(end).val;
+    //         this.set(start, endVal);
+    //         this.set(end, startVal);
+    //         start++;
+    //         end--;
+    //     }
+    //     return this;
+    // }
+
+    // As lovely and simple as this solution is -- and it works --
+    // set uses get, and get loops through the list,
+    // so this is a loop within a loop, or O(n**2)
+
+    // Colt's pseudocode
+
+    // Swap the head and the tail
+    // Create a variable called next
+    // Create a variable called previous
+    // Create a variable called node or current and initialize
+    // it to the head property
+    // Loop through the list
+    // Set next to be the next property on whatever currNode is
+    // Set the prev to be the value of the node variable
+    // Set the node variable to be the value of the next variable
+
+    // So to work through this mentally
+    // Say you have 5 -> 10 -> 15 -> 20 -> 25
+    //             prev  curr  next
+    // You need 10-> 5-> 15 -> 20 -> 25
+    // So you say curr.next = prev
+    //  10-> 5-> 15 -> 20 -> 25
+    // curr prev next
+    // Now you have to say prev = curr
+    // curr = next
+    // and next = next.next
+
+
+    reverse(){
+        let prev = null;
+        let curr = this.head;
+        let next;
+        while(curr){
+            console.log("START LOOP:");
+            console.log(`Prev is ${JSON.stringify(prev)}`);
+            console.log(`Curr is ${JSON.stringify(curr)}`);
+            console.log(`Next is ${JSON.stringify(next)}`);
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+            console.log("AFTER CHANGES:");
+            console.log(`Prev is ${JSON.stringify(prev)}`);
+            console.log(`Curr is ${JSON.stringify(curr)}`);
+            console.log(`Next is ${JSON.stringify(next)}`);
+        }
+        const temp = this.head;
+        this.head = this.tail;
+        this.tail = temp;
+        return this;
+    }
+
+    // Let's break it down
+    // Say you start with 5-> 10-> 15-> 20-> 25
+    // You start with saying prev is null
+    // curr is 5->
+    // next is undefined
+    // In the first loop you say
+    // next is curr.next
+    // so next is 10->
+    // this way you've stored the next curr
+    // then the crucial switch, curr.next = prev
+    // curr is changed to point to what was before it
+    // on the first loop, it's switched to point to null
+    // so 5 -> null
+    // then you move the prev and curr forward
+    // prev = curr
+    // so prev is 5->null
+    // curr = next
+    // curr = 10->15
+    // Second loop
+    // next is curr.next, so next is 15->
+    // again, this stores what curr will be moved to
+    // then you switch to point 10 to 5
+    // 5 is stores as prev, so curr.next = prev does
+    // 10-> 5 -> null
+    // then prev = curr stores prev as 10 -> 5 -> null
+    // then curr = next stores curr = 15->
+    // 3rd loop
+    // next moves up to 20 -> 25 -> null
+    // curr is 15-> 20 -> 25 -> null
+    // switch so curr points to prev, which is 10 -> 5 -> null
+    // curr.next = prev, now 15 -> 10 -> 5 -> null
+    // prev = curr, so prev is 15 -> 10 -> 5 -> null
+    // curr = next, so curr is now 20 -> 25 -> null
+    // 4th loop
+    // next = curr.next: next is 25 -> null
+    // curr.next = prev: curr.next is  25 -> null
+    // prev = curr, prev is 20 -> 25 -> null
+    // curr = next, curr is 25 -> null
+    // 5th loop
+    // next = curr.next: next is null
+    // curr.next = prev: curr.next is 20 -> 25 -> null
+    // prev = curr: prev is 25 -> null
+    // curr = next: curr is null
+    // the loop stops running
+
 
     //Implement the following on the SinglyLinkedList class
     //
@@ -420,7 +584,13 @@ class SinglyLinkedList {
     }
 }
 
-// const sll = new SinglyLinkedList();
+const sll = new SinglyLinkedList();
+sll.push(5).push(10).push(15).push(20).push(25);
+// console.log(sll);
+console.log(sll.reverse());
+sll.traverse();
+// console.log(sll.get(2))
+// console.log(sll);
 // console.log(sll.get(0));
 // sll.push(15);
 // console.log(sll);
@@ -448,11 +618,17 @@ class SinglyLinkedList {
 // console.log(sll.rotate(-1));
 
 // Colt's tests for insert
-const singlyLinkedList = new SinglyLinkedList;
-singlyLinkedList.push(5).push(10).push(15).push(20);
-console.log(singlyLinkedList.insert(2, 12)); // true
-singlyLinkedList.insert(100,12); // false
-console.log(singlyLinkedList.length); // 5
+// const singlyLinkedList = new SinglyLinkedList;
+// singlyLinkedList.push(5).push(10).push(15).push(20).push(25);
+// console.log(singlyLinkedList);
+// console.log(singlyLinkedList.remove(2));
+// console.log(singlyLinkedList.get(2));
+// console.log(singlyLinkedList.reverse());
+// console.log(singlyLinkedList.head.next);
+// console.log(singlyLinkedList.head.next.next);
+// console.log(singlyLinkedList.insert(2, 12)); // true
+// singlyLinkedList.insert(100,12); // false
+// console.log(singlyLinkedList.length); // 5
 // singlyLinkedList.head.val // 5
 // singlyLinkedList.head.next.val // 10
 // singlyLinkedList.head.next.next.val // 12
@@ -463,6 +639,15 @@ console.log(singlyLinkedList.length); // 5
 // singlyLinkedList.head.next.next.next.next.next.val //25
 // singlyLinkedList.tail.val // 25
 
+// Colt's tests for remove
+//     const singlyLinkedList = new SinglyLinkedList;
+//     singlyLinkedList.push(5).push(10).push(15).push(20);
+// console.log(singlyLinkedList.remove(2).val); // 15
+//     singlyLinkedList.remove(100); // undefined
+// console.log(singlyLinkedList.length); // 3
+// console.log(singlyLinkedList.head.val); // 5
+// console.log(singlyLinkedList.head.next.val); // 10
+// console.log(singlyLinkedList.head.next.next.val); // 20
 
 // Clean version
 
@@ -532,6 +717,57 @@ class SinglyLinkedListClean {
             if (i === position) return node;
             node = node.next;
         }
+    }
+
+    set(position, value){
+        if (position > this.length || position < 0) return false;
+        if (position === this.length) {
+            this.push(value);
+        } else if (position === this.length - 1){
+            this.tail.val = value;
+        } else if (position === 0) {
+            this.head.val = value;
+        } else {
+            const targetNode = this.get(position);
+            targetNode.val = value;
+        }
+        return true;
+    }
+
+    insert(index, value){
+        if (index < 0 || index > this.length) return false;
+        if (index === 0){
+            this.shift(value);
+            return true;
+        }
+        if (index === this.length){
+            this.push(value);
+            return true;
+        }
+        const prev = this.get(index - 1);
+        const aft = prev.next;
+        const newNode = new Node(value);
+        prev.next = newNode;
+        newNode.next = aft;
+        this.length++;
+        return true;
+    }
+
+    remove(index){
+        if (this.length < 1 || index < 0 || index > this.length - 1) return undefined;
+        if (this.length === 1) {
+            const soleNode = this.head;
+            this.head = null;
+            this.length = null;
+            return soleNode.val;
+        }
+        if (index === 0) this.shift();
+        if (index === this.length - 1) this.pop();
+        const targetPrev = this.get(index - 1);
+        const targetNode = targetPrev.next;
+        targetPrev.next = targetPrev.next.next;
+        this.length--;
+        return targetNode;
     }
 
 }
