@@ -306,86 +306,6 @@ class BinarySearchTree{
     //     return nodeToRemove.value;
     // }
 
-    //
-    //     var binarySearchTree = new BinarySearchTree();
-    //     binarySearchTree
-    //         .insert(15)
-    //         .insert(20)
-    //         .insert(10)
-    //         .insert(12)
-    //         .insert(1)
-    //         .insert(5)
-    //         .insert(50);
-    //     binarySearchTree.remove(50);
-    //     binarySearchTree.root.right.value // 20
-    //     binarySearchTree.root.right.right // null
-    //
-    //     binarySearchTree.remove(5);
-    //     binarySearchTree.root.left.left.value // 1
-    //     binarySearchTree.root.left.left.right // null
-    //
-    //     var binarySearchTree = new BinarySearchTree();
-    //     binarySearchTree
-    //         .insert(15)
-    //         .insert(20)
-    //         .insert(10)
-    //         .insert(12)
-    //         .insert(1)
-    //         .insert(5)
-    //         .insert(50);
-    //
-    //     binarySearchTree.remove(1);
-    //     binarySearchTree.root.left.left.value // 5
-    //     binarySearchTree.root.left.left.left // null
-    //     binarySearchTree.root.left.left.right // null
-    //
-    //     binarySearchTree.remove(20);
-    //     binarySearchTree.root.right.value // 50
-    //     binarySearchTree.root.right.right // null
-    //     binarySearchTree.root.right.left // null
-    //
-    //     var binarySearchTree = new BinarySearchTree();
-    //     binarySearchTree
-    //         .insert(15)
-    //         .insert(20)
-    //         .insert(10)
-    //         .insert(12)
-    //         .insert(1)
-    //         .insert(5)
-    //         .insert(50)
-    //         .insert(60)
-    //         .insert(30)
-    //         .insert(25)
-    //         .insert(23)
-    //         .insert(24)
-    //         .insert(70);
-    //
-    //     binarySearchTree.remove(10);
-    //     binarySearchTree.root.left.value // 12
-    //     binarySearchTree.root.left.left.value // 1
-    //     binarySearchTree.root.left.left.right.value // 5
-    //
-    //     binarySearchTree.remove(50);
-    //     binarySearchTree.root.right.value // 20
-    //     binarySearchTree.root.right.right.value // 60
-    //     binarySearchTree.root.right.right.left.value // 30
-    //
-    //     var binarySearchTree = new BinarySearchTree();
-    //     binarySearchTree
-    //         .insert(22)
-    //         .insert(49)
-    //         .insert(85)
-    //         .insert(66)
-    //         .insert(95)
-    //         .insert(90)
-    //         .insert(100)
-    //         .insert(88)
-    //         .insert(93)
-    //         .insert(89)
-    //
-    //     binarySearchTree.remove(85);
-    //     binarySearchTree.root.right.right.value // 88
-    //     binarySearchTree.root.right.right.right.left.left.value // 89
 
     // The problem here all along was unclear instructions
     // It told you to handle removal of children but not how,
@@ -443,14 +363,6 @@ class BinarySearchTree{
         return values[values.length - 2];
     }
 
-    // To check if a Binary tree is balanced we need to check three conditions :
-    //
-    //     1. The absolute difference between heights of left and right subtrees at any node should be less than 1.
-    //
-    // 2. For each node, its left subtree should be a balanced binary tree.
-    //
-    // 3. For each node, its right subtree should be a balanced binary tree.
-
     //Binary Search Tree Exercise - Check if balanced
     //
     // Write a function on the BinarySearchTree class
@@ -459,6 +371,128 @@ class BinarySearchTree{
     //
     // A balanced tree is defined as a tree where the depth of all leaf nodes or nodes with single children differ by no more than one.
 
+    // This requires a look back at BST terminology
+    // A tree consists of nodes in parent/child relationships
+    // Lists are linear, trees are nonlinear
+    // The root is the top node in a tree
+    // A **child** is a node directly connected to another node
+        // when moving away from the root
+    // A **parent** is a node directly connected to another node
+        // when moving towards the root
+    // Siblings are a group of nodes with the same parent
+    // A **leaf** is a node with no children
+    // An edge is the connection between one node and another
+
+    // From the comments on the problem, posted by a student
+    // To check if a Binary tree is balanced we need to check three conditions :
+
+    //     1. The absolute difference between heights of left and right subtrees at any node should be less than 1.
+
+    // 2. For each node, its left subtree should be a balanced binary tree.
+
+    // 3. For each node, its right subtree should be a balanced binary tree.
+
+    // So to think this through ... you have to be able
+    // to go away from the root, traversing
+    // every possible path to a leaf
+    // There needs to be a count
+    // so imagine we have
+    //            10
+    //        5       15
+    //      3   6   12   18
+    // You have to go through the sequences
+    // left - left
+    // left - right
+    // right - left
+    // right - right
+    // Basically, you have to be able first to find all the
+    // leaf nodes
+    // And you have to check that no
+    // leaf node has a parent with grandchildren
+    // leveraging what I've already written,
+    // I could first put all the nodes in an array
+    // using any of the BFS or DFS methods
+    // but modifying it to store the nodes
+    // then filter the array to retain only
+    // nodes that have neither left nor right
+    // for each of those nodes,
+    // go to its parent. if the parent
+    // check if the child is left or right side
+    // then check the opposite side child
+    // if the opposite side child has children,
+    // check the children
+    // if the children have children, it's not balanced
+
+    // In fact that would not work
+    // What you have to do is look at all the nodes
+    // check if they have both left and right
+    // it all comes down to measuring height of subtree
+    // to do that, you have to go left as far as you can
+    // then right as far as you can
+
+    // unbalanced
+    //              5
+    //                      6
+    //                              7
+    // balanced
+    //                  15
+    //          10              20
+    //              12
+    // hypothesis: any node with a single child
+    // if it has grandchildren, is unbalanced
+    // let's go with that
+
+    // isBalanced(){
+    //     const visited = [];
+    //     let current = this.root;
+    //     function traverse(node){
+    //         if (node.left) traverse(node.left);
+    //         visited.push(node);
+    //         if (node.right) traverse(node.right);
+    //     }
+    //     traverse(current);
+    //     for (const node of visited) {
+    //        if (!node.left){
+    //            if (node.right) {
+    //                if (node.right.right || node.right.left) return false;
+    //            }
+    //        }
+    //        if (!node.right){
+    //            if (node.left){
+    //                if (node.right.right || node.right.left) return false;
+    //            }
+    //        }
+    //     }
+    //     return true;
+    // }
+
+    // now to refactor it a little bit ...
+    isBalanced() {
+        function checkBalance(node) {
+            if (!node) return true;
+
+            // Case 1: Node has only left child
+            if (node.left && !node.right) {
+                // Check if left child has any children
+                if (node.left.left || node.left.right) {
+                    return false;
+                }
+            }
+
+            // Case 2: Node has only right child
+            if (!node.left && node.right) {
+                // Check if right child has any children
+                if (node.right.left || node.right.right) {
+                    return false;
+                }
+            }
+
+            // Recursively check left and right subtrees
+            return checkBalance(node.left) && checkBalance(node.right);
+        }
+
+        return checkBalance(this.root);
+    }
 
 }
 
@@ -567,3 +601,30 @@ class BinarySearchTree{
 //     binarySearchTree2.isBalanced(); // true
 //     binarySearchTree2.insert(7);
 //     binarySearchTree2.isBalanced(); // false
+
+// isBalanced test cases
+
+    const binarySearchTree = new BinarySearchTree();
+    binarySearchTree.insert(15);
+    binarySearchTree.insert(20);
+    binarySearchTree.insert(10);
+    binarySearchTree.insert(12);
+console.log(binarySearchTree.isBalanced()); // true
+
+// Note: this will end up with:
+//                  15
+//          10              20
+//              12
+//
+    binarySearchTree2 = new BinarySearchTree();
+    binarySearchTree2.insert(5);
+console.log(binarySearchTree2.isBalanced()); // true
+    binarySearchTree2.insert(6);
+console.log(binarySearchTree2.isBalanced()); // true
+    binarySearchTree2.insert(7);
+console.log(binarySearchTree2.isBalanced()); // false
+
+// Note: this will end up with
+//              5
+//                      6
+//                              7
