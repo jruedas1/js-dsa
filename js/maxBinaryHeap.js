@@ -178,3 +178,94 @@ class MaxBinaryHeap {
 // console.log(testArr[7])
 
 // console.log(-2 > undefined);
+
+// Here is the instructor's solution
+// class MaxBinaryHeap {
+//     constructor(){
+//         this.values = [];
+//     }
+//     insert(element){
+//         this.values.push(element);
+//         this.bubbleUp();
+//     }
+//     bubbleUp(){
+//         let idx = this.values.length - 1;
+//         const element = this.values[idx];
+//         while(idx > 0){
+//             let parentIdx = Math.floor((idx - 1)/2);
+//             let parent = this.values[parentIdx];
+//             if(element <= parent) break;
+//             this.values[parentIdx] = element;
+//             this.values[idx] = parent;
+//             idx = parentIdx;
+//         }
+//     }
+//     extractMax(){
+//         const max = this.values[0];
+//         const end = this.values.pop();
+//         if(this.values.length > 0){
+//             this.values[0] = end;
+//             this.sinkDown();
+//         }
+//         return max;
+//     }
+//     sinkDown(){
+//         let idx = 0;
+//         const length = this.values.length;
+//         const element = this.values[0];
+//         while(true){
+//             let leftChildIdx = 2 * idx + 1;
+//             let rightChildIdx = 2 * idx + 2;
+//             let leftChild,rightChild;
+//             let swap = null;
+//
+//             if(leftChildIdx < length){
+//                 leftChild = this.values[leftChildIdx];
+//                 if(leftChild > element) {
+//                     swap = leftChildIdx;
+//                 }
+//             }
+//             if(rightChildIdx < length){
+//                 rightChild = this.values[rightChildIdx];
+//                 if(
+//                     (swap === null && rightChild > element) ||
+//                     (swap !== null && rightChild > leftChild)
+//                  ) {
+//                     swap = rightChildIdx;
+//                 }
+//             }
+//             if (swap === null) break;
+//             this.values[idx] = this.values[swap];
+//             this.values[swap] = element;
+//             idx = swap;
+//         }
+//     }
+// }
+//
+// let heap = new MaxBinaryHeap();
+// heap.insert(41);
+// heap.insert(39);
+// heap.insert(33);
+// heap.insert(18);
+// heap.insert(27);
+// heap.insert(12);
+// heap.insert(55);
+
+// Notice the instructor extracts the sinkDown method
+// this seemed useless to me but would then make it
+// easier to modify these techniques when adapting
+// the binary heap for use in a priority queue
+
+// in addition, he uses a while(true), with a `swap`
+// variable to control the loop continuity
+// the loop variable is set to null at the start of each loop
+// within the loop, instead of instantly doing swaps,
+// he uses the swap variable to hold the index for the intended swap
+// after all the comparisons are done, he checks to
+// see if swap is still null, if it is, he breaks the loop
+// if it's not, he swaps
+
+// I do have to say this remains a bit counterintuitive to me
+// so instead, in the priority queue I do a rather complicated
+// conditional check. Admittedly, this is cleaner than my approach
+

@@ -121,8 +121,6 @@ class PriorityQueue {
     }
 
     dequeue(){
-        // console.log("Running dequeue on -------------------------");
-        // console.log(this);
         const oldRoot = this.values[0];
         this.values[0] = this.values.pop();
         let parentIndex = 0;
@@ -131,15 +129,12 @@ class PriorityQueue {
         while ((leftChildIndex < this.values.length || rightChildIndex < this.values.length)
             && ((leftChildIndex < this.values.length && this.values[leftChildIndex] && this.values[parentIndex].priority > this.values[leftChildIndex].priority) || (rightChildIndex < this.values.length && this.values[rightChildIndex] && this.values[parentIndex] > this.values[rightChildIndex].priority))
             ) {
-            // console.log(("looping"))
             let parentNode = this.values[parentIndex];
             let parentPriority = parentNode.priority;
             let leftChildNode = this.values[leftChildIndex];
             let leftChildPriority = leftChildNode ? leftChildNode.priority : undefined;
             let rightChildNode = this.values[rightChildIndex];
             let rightChildPriority = rightChildNode ? rightChildNode.priority : undefined;
-            // console.log(parentPriority, leftChildPriority, rightChildPriority);
-            // while(){
             // if both children have higher priority than the parent
             if ((leftChildPriority && leftChildPriority < parentPriority) && (rightChildPriority && rightChildPriority < parentPriority)){
                 // we check if one child has higher priority than the other
@@ -167,15 +162,16 @@ class PriorityQueue {
             }
             leftChildIndex = (parentIndex * 2) + 1;
             rightChildIndex = (parentIndex * 2) + 2;
-
         }
-        // console.log(this);
         return oldRoot;
     }
 
     // :) I know this isn't how you're **supposed** to solve it and far
     // from the most efficient, but I'm just happy because I solved it my way
-    // and without an y help :)
+    // and without any help :)
+
+    // this still needs to check the edge case (only one thing in there)
+    // but the basic logic is in place
 }
 
 const pq = new PriorityQueue();
