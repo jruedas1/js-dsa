@@ -172,6 +172,16 @@ class PriorityQueue {
 
     // this still needs to check the edge case (only one thing in there)
     // but the basic logic is in place
+
+    // The other thing the instructor mentions is to add logic that would
+    // ensure that in case of equal priority, nodes are returned in
+    // insertion order
+    // the way to do this would be to add an insertTime to each node
+    // setting it to Date.now()
+    // Then we would add an extra layer of logic that would also check for
+    // equality, and would swap based on time in that case
+    // so in real world it wouldn't be just a priority, it would also
+    // be other factors taken into account
 }
 
 const pq = new PriorityQueue();
