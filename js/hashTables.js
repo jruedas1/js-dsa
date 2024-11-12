@@ -142,7 +142,52 @@ class HashTable {
     // or, conversely
     // return keyValPair ? keyValPair[1] : keyValPair
 
+    // keys
+    // loops through the table and returns an array of keys in the table
+    // values
+    // loops through the table and returns an array of the values in the table
 
+    // keys(){
+    //     return this.keyMap.reduce((acc, curr) => {
+    //         if (curr) acc = acc.concat(curr.map(arr => arr[0]));
+    //         return acc;
+    //     }, []);
+    // }
+
+    // or, better yet
+
+    // keys(){
+    //     return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] );
+    // }
+
+    keys(){
+        return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] );
+    }
+
+
+    // Better solution from a student
+    // But I'm not quite sure how it works
+    // keys() {
+    //     return this.keyMap.flat().map(([key]) => key);
+    // }
+
+
+    // values(){
+    //     return this.keyMap.reduce((acc, curr) => {
+    //         if (curr) acc = acc.concat(curr.map(arr => arr[1]));
+    //         return acc;
+    //     }, []);
+    // }
+
+    // values(){
+    //     return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[1]) :[] );
+    // }
+
+    // if you want to reduce it to unique items:
+
+    values(){
+        return [...new Set(this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[1]) :[] ))];
+    }
 
 
 }
@@ -161,4 +206,22 @@ console.log(table.get("burnt siena"));
 // console.log(table.keyMap);
 console.log(table.get("orange"));
 console.log(table.get("mauve"));
+table.set("green", "fiddlesticks");
+
+console.log(table.keys());
+console.log(table.values());
+
+// const test = [[0, 1], [2, 3]]
+// console.log(test.map(arr => arr[0]));
+// const test2 = [[[0, 1], [2, 3]], [[4,5], [6, 7]], undefined];
+// console.log(
+//     test2.reduce((acc, curr) => {
+//         if (curr) acc = acc.concat(curr.map(arr => arr[0]));
+//         return acc;
+//     }, []));
+
+// console.log(test2.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] ));
+
+// this is fine if there are no undefined values
+
 
