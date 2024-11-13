@@ -160,9 +160,17 @@ class HashTable {
     //     return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] );
     // }
 
+    // keys(){
+    //     return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] );
+    // }
+
     keys(){
-        return this.keyMap.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] );
+        return this.keyMap.flatMap(arr => arr.map(arr=>arr[0]));
     }
+
+    // You don't need to check for undefined because in a new Array()
+    // you don't get undefined, you get "empty items"
+    // iteration methods skip these
 
 
     // Better solution from a student
@@ -209,7 +217,7 @@ console.log(table.get("mauve"));
 table.set("green", "fiddlesticks");
 
 console.log(table.keys());
-console.log(table.values());
+// console.log(table.values());
 
 // const test = [[0, 1], [2, 3]]
 // console.log(test.map(arr => arr[0]));
@@ -222,6 +230,21 @@ console.log(table.values());
 
 // console.log(test2.flatMap(arr => arr ? arr.map(arr=>arr[0]) :[] ));
 
-// this is fine if there are no undefined values
-
+// but the ? is unnecessary, as new Array() does not populate with undefined
+// it populates with empty spaces, which iterators skip over
+// so the student solution .flat on this [[[0, 1], [2, 3]], [[4,5], [6, 7]]
+console.log([[[0, 1], [2, 3]], [[4, 5], [6, 7]]].flat());
+// say I have [[0, 1], [2,3]]
+// and [[4, 5], [6, 7]] all in an array
+// so flat would turn it into an array of arrays
+// [ [ 0, 1 ], [ 2, 3 ], [ 4, 5 ], [ 6, 7 ] ]
+// which is not what I expected ... I expected it
+// would turn it into a one-dimensional array, but it turned a three d array
+// into a 2 d array
+// next [key] => key is array destructuring, which I didn't even
+// know you could do in a variable assignment ... or rather
+// I'd forgotten ... but that start of a map or filter is a
+// parameter assignment and you can destructure in there
+// so it flattens the first layer and then pulls out the first
+// of each array and creates a new array with them
 
